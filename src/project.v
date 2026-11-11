@@ -1,6 +1,6 @@
 /*
  * Generado con img2rom.html, modo experimental
- * Imagen estatica 640x480, 6 bits por pixel.
+ * Imagen estatica 640x480, 2 bits por pixel.
  * No cabe en una tile: solo para simular en VGA Playground.
  */
 
@@ -11,7 +11,7 @@
 parameter DISPLAY_WIDTH = 640;
 parameter DISPLAY_HEIGHT = 480;
 
-module tt_um_vga_example (
+module tt_um_alexsactic_vgaimage (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -62,12 +62,18 @@ module tt_um_vga_example (
   wire in_display = (pix_x < DISPLAY_WIDTH) && (pix_y < DISPLAY_HEIGHT);
   wire logo_area  = (x < LOGO_WIDTH) && (y < LOGO_HEIGHT);
 
+  wire [1:0] pixel_index;
   wire [5:0] color;
 
   bitmap_rom rom1 (
       .x(x),
       .y(y),
-      .pixel(color)
+      .pixel(pixel_index)
+  );
+
+  palette palette_inst (
+      .color_index(pixel_index),
+      .rrggbb(color)
   );
 
   // RGB output logic
